@@ -27,7 +27,7 @@ function Write-ErrorDetails {
 }
 
 # Configurações da API
-$BaseUrl = "http://localhost:8080"
+$BaseUrl = "http://localhost:8080/api/records"
 $SleepIntervalSeconds = 1
 
 try {
@@ -47,5 +47,6 @@ try {
     Write-Host "`nTestes concluídos com sucesso!" -ForegroundColor Green
 }
 catch {
+    Write-Host "Entrou no bloco de erro" -ForegroundColor Red
     Write-ErrorDetails -ErrorRecord $_
 }

@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  gatling:
+    build:
+      context: ./gatling
+      dockerfile: Dockerfile
+    environment:
+      BASE_URL: "http://webapi:80"
+    volumes:
+      - ./gatling/results:/opt/gatling/results
+      - ./gatling:/opt/gatling/user-files/simulations

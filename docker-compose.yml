@@ -7,22 +7,33 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:80"  # Mapeia a porta 80 do container para a porta 8080 do host
-    volumes:
-      - sqlite_data:/data
+    depends_on:
+      - db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=postgres;Database=webapidb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'
 
-  gatling:
-    build:
-      context: ./gatling
-      dockerfile: Dockerfile
-    depends_on:
-      - webapi
+  db:
+    image: postgres:latest
     environment:
-      BASE_URL: "http://webapi:80"
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=webapidb
+    ports:
+      - "5432:5432"
     volumes:
-      - ./gatling/results:/opt/gatling/results
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '10'
+          memory: '8GB'
 
 volumes:
-  sqlite_data:
+  postgres_data:
     driver: local
