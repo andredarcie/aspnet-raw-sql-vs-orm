@@ -5,6 +5,8 @@
 # Logs
 Logs/
 
+gatling/results/
+
 # Generated files
 project.lock.json
 .vs/
