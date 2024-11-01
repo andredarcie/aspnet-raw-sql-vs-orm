@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"  # Mapeia a porta 80 do container para a porta 8080 do host
+    volumes:
+      - sqlite_data:/data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  gatling:
+    build:
+      context: ./gatling
+      dockerfile: Dockerfile
+    depends_on:
+      - webapi
+    environment:
+      BASE_URL: "http://webapi:80"
+    volumes:
+      - ./gatling/results:/opt/gatling/results
+
+volumes:
+  sqlite_data:
+    driver: local
